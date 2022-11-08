@@ -19,4 +19,8 @@ contract UserBalanceContract {
 
         return (balances[msg.sender].balance);
     }
+
+    fallback() external payable {}
+
+    receive() external payable {}
 }
