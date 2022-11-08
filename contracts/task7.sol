@@ -8,7 +8,7 @@ contract UserBalanceContract {
     }
 
     // balance mapping
-    mapping(address => Balance) public balances;
+    mapping(address => Balance) private balances;
 
     function deposit () external payable {
         balances[msg.sender] = Balance({balance: balances[msg.sender].balance + msg.value, exists: true});
