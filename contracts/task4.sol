@@ -57,7 +57,7 @@ contract UserBalanceContract {
 
     modifier availableFee(uint256 _amount) {
         if (fee > _amount) {
-            revert AmountToSmall({available: _amount, required: fee});
+            revert AmountTooSmall({available: _amount, required: fee});
         }
         _;
     }
@@ -79,18 +79,18 @@ contract UserBalanceContract {
     }
 
     function withdraw(uint256 _amount) public isOwner UserBalanceExists {
-        if (usersBalances[msg.sender] < _amount) {
-            revert AmountToSmall({available : usersBalances[msg.sender], required : _amount});
+        if (usersBalances[msg.sender].balance < _amount) {
+            revert AmountTooSmall({available : usersBalances[msg.sender].balance, required : _amount});
         }
 
-        usersBalances[msg.sender] -= amount;
+        usersBalances[msg.sender].balance -= _amount;
     }
 
-    function addFund(uint256 _amount) public availableFee(usersBalances[msg.sender] + _amount) {
+    function addFund(uint256 _amount) public availableFee(usersBalances[msg.sender].balance + _amount) {
         if(usersBalances[msg.sender].exists == false) {
             revert OnlyDeposited();
         }
 
-        usersBalances[msg.sender] += amount - fee;
+        usersBalances[msg.sender].balance += _amount - fee;
     }
 }
